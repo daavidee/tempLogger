@@ -1,0 +1,33 @@
+#!/bin/sh
+# /etc/init.d/tempLogger
+
+### BEGIN INIT INFO
+# Provides: tempLogger
+# Required-Start: $remote_fs $syslog
+# Required-Stop: $remote_fs $syslog
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: tempLogger
+# Description: tempLogger service
+### END INIT INFO
+     
+     
+export HOME
+case "$1" in
+    start)
+        echo "Starting tempLogger"
+        sudo python /home/pi/tempLogger/IO_control.py&
+    ;;
+    stop)
+        echo "Stopping tempLogger"
+        PID1=`ps auxwww | grep IO_control.py | head -1 | awk '{print $2}'`
+		PID2=`ps auxwww | grep tempLog.py | head -1 | awk '{print $2}'`
+        kill -9 $PID1
+		kill -9 $PID2
+    ;;
+    *)
+        echo "Usage: /etc/init.d/tempLogger {start|stop}"
+        exit 1
+    ;; 
+esac
+exit 0
